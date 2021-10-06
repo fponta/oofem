@@ -37,7 +37,7 @@
 
 #include "matstatus.h"
 #include "floatarray.h"
-#include "structuralms.h"
+#include "sm/Materials/structuralms.h"
 #include "gausspoint.h"
 #include "timestep.h"
 

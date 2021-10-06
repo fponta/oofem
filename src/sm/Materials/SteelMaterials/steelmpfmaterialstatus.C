@@ -32,7 +32,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "sm/Materials/steelmpfmaterialstatus.h"
+#include "steelmpfmaterialstatus.h"
 #include "sm/Materials/structuralms.h"
 #include "sm/Materials/structuralmaterial.h"
 #include "contextioerr.h"

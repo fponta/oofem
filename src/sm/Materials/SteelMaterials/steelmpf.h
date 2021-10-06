@@ -35,7 +35,7 @@
 #ifndef steelmpf_h
 #define steelmpf_h
 
-#include "structuralmaterial.h"
+#include "sm/Materials/structuralmaterial.h"
 
 #define _IFT_SteelMPF_Name "steelMPF"
 #define _IFT_SteelMPF_fyP "fyp"

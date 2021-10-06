@@ -276,7 +276,6 @@ set (sm_material
     Materials/LatticeMaterials/latticeplasticitydamageviscoelastic.C
     #Steel materials
     Materials/SteelMaterials/steelmpf.C
-    Materials/SteelMaterials/steelmpfmaterialstatus.C
 )
 
     

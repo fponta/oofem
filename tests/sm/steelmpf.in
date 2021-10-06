@@ -1,0 +1,35 @@
+steelmpf.out
+Test of steelmpf hysteretic material
+NonLinearStatic nsteps 9 deltat 1.0 rtolv 1e-4 controlmode 1 initialGuess 1 maxiter 300 manrmsteps 1 nmodules 1 
+errorcheck
+domain 3dTruss
+OutputManager tstep_all dofman_all element_all
+ndofman 2 nelem 1 ncrosssect 1 nmat 1 nbc 3 nic 0 nltf 2 nset 3
+node 1 coords 3 0.  0.  0.
+node 2 coords 3 1000.  0.  0.
+Truss3d 1 nodes 2 1 2
+SimpleCS 1 thick 1.0 width 1.0 material 1 set 1
+steelMPF 1 fyP 400.0 fyN 300.0 E0 200000.0 bP 0.15 bN 0.15 R0 20.0 a1 0.925 a2 0.15 a3P 0.01 a4P 7.0 a3N 0.01 a4N 7 d 0.0 talpha 1.0
+#isole 1 d 1.0  E 200000.0 n 0.2 talpha 0.0 
+BoundaryCondition  1 loadTimeFunction 1 dofs 3 1 2 3 values 3 0.0 0.0 0.0 set 2
+BoundaryCondition  2 loadTimeFunction 1 dofs 2 2 3 values 2 0.0 0.0 set 3
+BoundaryCondition  3 loadTimeFunction 2 dofs 1 1 values 1 1.0 set 3
+#NodalLoad 3 loadTimeFunction 2 Components 1 1.0 DOFs 1 1 set 3
+ConstantFunction 1 f(t) 1.0
+PiecewiseLinFunction 2 npoints 7 t 7 0.0 3.0 4.0 5.0 6.0 7.0 8.0 f(t) 7 0.0 3.0 2.0 5.0 -5.0 -2.0 -3.0
+Set 1 elements 1 1
+Set 2 nodes 1 1
+Set 3 nodes 1 2
+#%BEGIN_CHECK%
+## check element no. 1 force vector
+#ELEMENT tStep 2 number 1 gp 1 keyword 4 component 1  value 1.e-3 tolerance 1.e-5
+#ELEMENT tStep 2 number 1 gp 1 keyword 1 component 1  value 200. tolerance 1.e-2
+#ELEMENT tStep 4 number 1 gp 1 keyword 4 component 1  value 3.000000e-03 tolerance 1.e-5
+#ELEMENT tStep 4 number 1 gp 1 keyword 1 component 1  value 4.2999e+02 tolerance 1.e-2
+#ELEMENT tStep 5 number 1 gp 1 keyword 4 component 1  value 2.000000e-03 tolerance 1.e-5
+#ELEMENT tStep 5 number 1 gp 1 keyword 1 component 1  value 2.3007e+02 tolerance 1.e-2
+#ELEMENT tStep 7 number 1 gp 1 keyword 4 component 1  value -5.0000e-03 tolerance 1.e-5
+#ELEMENT tStep 7 number 1 gp 1 keyword 1 component 1  value -4.0253e+02 tolerance 1.e-2
+#ELEMENT tStep 9 number 1 gp 1 keyword 4 component 1  value -3.0000e-03 tolerance 1.e-5
+#ELEMENT tStep 9 number 1 gp 1 keyword 1 component 1  value -1.0631e+02 tolerance 1.e-1      
+#%END_CHECK%

@@ -84,7 +84,7 @@ SteelMPF::give1dStressStiffMtrx( MatResponseMode mode,
 {
     if ( this->isActivated( tStep ) ) {
         // static_cast as I'm the one overriding CreateStatus and the type HAS to be what the one needed
-        auto ms = static_cast<SteelMPFMaterialStatus *>( this->giveStatus( gp ) );
+        const auto ms = static_cast<SteelMPFMaterialStatus *>( this->giveStatus( gp ) );
         if ( !ms->hasTangent() ) { ///@todo Make this hack fit more nicely into OOFEM in general;
             // Evaluating the function once, so that the tangent can be obtained.
             this->giveRealStressVector_1d( zeros<1>(), gp, tStep );
@@ -132,8 +132,8 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
     double &epsrNTwoPrev = ms->giveEpsrNTwoPrevTemp();
     double &sigrNTwoPrev = ms->giveSigrNTwoPrevTemp();
 
-    double &epsrPMaxMax = ms->giveEpsrPMaxMaxTemp();
-    double &epsrNMaxMax = ms->giveEpsrNMaxMaxTemp();
+    double &epsrPMax = ms->giveEpsrPMaxTemp();
+    double &epsrNMax = ms->giveEpsrNMaxTemp();
     double &RP          = ms->giveRPTemp();
     double &RN          = ms->giveRNTemp();
     int &nLoop          = ms->giveNLoopTemp();
@@ -200,13 +200,13 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 sigrN = sigOld;
                 nLoop++;
 
-                epsrNMaxMax = max( epsrN, epsrNMaxMax );
+                epsrNMax = max( epsrN, epsrNMax );
 
                 double sigShift;
-                if ( abs( epsrNMaxMax ) < epsYieldP ) {
+                if ( abs( epsrNMax ) < epsYieldP ) {
                     sigShift = 0.0;
                 } else {
-                    sigShift = max( 0.0, computeShift( fyN, epsrNMaxMax, epsYieldP, a3P, a4P ) );
+                    sigShift = max( 0.0, computeShift( fyN, epsrNMax, epsYieldP, a3P, a4P ) );
                 }
 
                 double sigy = -fyN - sigShift;
@@ -273,13 +273,13 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 sigrP = sigOld;
                 nLoop++;
 
-                epsrPMaxMax = min( epsrP, epsrPMaxMax );
+                epsrPMax = min( epsrP, epsrPMax );
 
                 double sigShift;
-                if ( abs( epsrPMaxMax ) < epsYieldN ) {
+                if ( abs( epsrPMax ) < epsYieldN ) {
                     sigShift = 0.0;
                 } else {
-                    sigShift = max( 0.0, computeShift( fyP, epsrPMaxMax, epsYieldN, a3N, a4N ) );
+                    sigShift = max( 0.0, computeShift( fyP, epsrPMax, epsYieldN, a3N, a4N ) );
                 }
 
                 double sigy = fyP + sigShift;
@@ -367,9 +367,9 @@ double SteelMPF::computeShift( const double &sigy, const double &epsmax, const d
 
 
 double
-SteelMPF::computeEpsilonStar( const double &eps, const double &eps0P, const double &epsrP )
+SteelMPF::computeEpsilonStar( const double &eps, const double &eps0, const double &epsr )
 {
-    return ( eps - epsrP ) / ( eps0P - epsrP );
+    return ( eps - epsr ) / ( eps0 - epsr );
 }
 
 
@@ -458,8 +458,8 @@ SteelMPFMaterialStatus ::SteelMPFMaterialStatus( GaussPoint *g, const double &fy
     epsrNTemp = 0.0;
     sigrNTemp = 0.0;
 
-    epsrPMaxMaxTemp = 0.0;
-    epsrNMaxMaxTemp = 0.0;
+    epsrPMaxTemp = 0.0;
+    epsrNMaxTemp = 0.0;
 
     eps0PTemp = 0.0;
     sig0PTemp = 0.0;
@@ -499,8 +499,8 @@ SteelMPFMaterialStatus ::SteelMPFMaterialStatus( GaussPoint *g, const double &fy
     epsrN = 0.0;
     sigrN = 0.0;
 
-    epsrPMaxMax = 0.0;
-    epsrNMaxMax = 0.0;
+    epsrPMax = 0.0;
+    epsrNMax = 0.0;
 
     eps0P = 0.0;
     sig0P = 0.0;
@@ -539,8 +539,8 @@ void SteelMPFMaterialStatus ::initTempStatus()
     sigrPTemp        = 0.0;
     epsrNTemp        = 0.0;
     sigrNTemp        = 0.0;
-    epsrPMaxMaxTemp  = 0.0;
-    epsrNMaxMaxTemp  = 0.0;
+    epsrPMaxTemp  = 0.0;
+    epsrNMaxTemp  = 0.0;
     epsrNTwoPrevTemp = 0.0;
     sigrNTwoPrevTemp = 0.0;
     epsrPTwoPrevTemp = 0.0;
@@ -571,8 +571,8 @@ void SteelMPFMaterialStatus::copyCommittedToTemp() noexcept
     sigrPTemp        = sigrP;
     epsrNTemp        = epsrN;
     sigrNTemp        = sigrN;
-    epsrPMaxMaxTemp  = epsrPMaxMax;
-    epsrNMaxMaxTemp  = epsrNMaxMax;
+    epsrPMaxTemp  = epsrPMax;
+    epsrNMaxTemp  = epsrNMax;
     eps0PTemp        = eps0P;
     sig0PTemp        = sig0P;
     eps0NTemp        = eps0N;
@@ -605,8 +605,8 @@ void SteelMPFMaterialStatus ::updateYourself( TimeStep *tStep ) noexcept
     sigrP        = sigrPTemp;
     epsrN        = epsrNTemp;
     sigrN        = sigrNTemp;
-    epsrPMaxMax  = epsrPMaxMaxTemp;
-    epsrNMaxMax  = epsrNMaxMaxTemp;
+    epsrPMax  = epsrPMaxTemp;
+    epsrNMax  = epsrNMaxTemp;
     eps0P        = eps0PTemp;
     sig0P        = sig0PTemp;
     eps0N        = eps0NTemp;
@@ -666,8 +666,8 @@ SteelMPFMaterialStatus::giveStateVector() const
         sigrN,
         epsrNTwoPrev,
         sigrNTwoPrev,
-        epsrPMaxMax,
-        epsrNMaxMax,
+        epsrPMax,
+        epsrNMax,
         RP,
         RN,
         RPTwoPrev,
@@ -699,8 +699,8 @@ void SteelMPFMaterialStatus ::saveContext( DataStream &stream, ContextMode mode 
     WRITE_STREAM_FUNC( sigrN )
     WRITE_STREAM_FUNC( epsrNTwoPrev )
     WRITE_STREAM_FUNC( sigrNTwoPrev )
-    WRITE_STREAM_FUNC( epsrPMaxMax )
-    WRITE_STREAM_FUNC( epsrNMaxMax )
+    WRITE_STREAM_FUNC( epsrPMax )
+    WRITE_STREAM_FUNC( epsrNMax )
     WRITE_STREAM_FUNC( RP )
     WRITE_STREAM_FUNC( RN )
     WRITE_STREAM_FUNC( RPTwoPrev )
@@ -733,8 +733,8 @@ void SteelMPFMaterialStatus::restoreContext( DataStream &stream, ContextMode mod
     READ_STREAM_FUNC( sigrN )
     READ_STREAM_FUNC( epsrNTwoPrev )
     READ_STREAM_FUNC( sigrNTwoPrev )
-    READ_STREAM_FUNC( epsrPMaxMax )
-    READ_STREAM_FUNC( epsrNMaxMax )
+    READ_STREAM_FUNC( epsrPMax )
+    READ_STREAM_FUNC( epsrNMax )
     READ_STREAM_FUNC( RP )
     READ_STREAM_FUNC( RN )
     READ_STREAM_FUNC( RPTwoPrev )

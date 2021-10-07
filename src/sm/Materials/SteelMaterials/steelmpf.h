@@ -40,8 +40,23 @@
 
 #include "matstatus.h"
 #include "floatarray.h"
-#include "gausspoint.h"
-#include "timestep.h"
+
+///@name Input fields for SteelMPF
+//@{
+#define _IFT_SteelMPF_Name "steelMPF"
+#define _IFT_SteelMPF_fyP "fyp"
+#define _IFT_SteelMPF_fyN "fyn"
+#define _IFT_SteelMPF_E0 "e0"
+#define _IFT_SteelMPF_bP "bp"
+#define _IFT_SteelMPF_bN "bn"
+#define _IFT_SteelMPF_R0 "r0"
+#define _IFT_SteelMPF_a1 "a1"
+#define _IFT_SteelMPF_a2 "a2"
+#define _IFT_SteelMPF_a3P "a3p"
+#define _IFT_SteelMPF_a4P "a4p"
+#define _IFT_SteelMPF_a3N "a3n"
+#define _IFT_SteelMPF_a4N "a4n"
+//@}
 
 namespace oofem {
 class GaussPoint;
@@ -89,8 +104,8 @@ public:
     double &giveSigrPTemp() { return this->sigrPTemp; }
     double &giveEpsrNTemp() { return this->epsrNTemp; }
     double &giveSigrNTemp() { return this->sigrNTemp; }
-    double &giveEpsrPMaxMaxTemp() { return this->epsrPMaxMaxTemp; }
-    double &giveEpsrNMaxMaxTemp() { return this->epsrNMaxMaxTemp; }
+    double &giveEpsrPMaxTemp() { return this->epsrPMaxTemp; }
+    double &giveEpsrNMaxTemp() { return this->epsrNMaxTemp; }
     double &giveEps0PTemp() { return this->eps0PTemp; }
     double &giveSig0PTemp() { return this->sig0PTemp; }
     double &giveEps0NTemp() { return this->eps0NTemp; }
@@ -146,8 +161,8 @@ protected:
     double epsrNTwoPrevTemp;
     double sigrNTwoPrevTemp;
 
-    double epsrPMaxMaxTemp;
-    double epsrNMaxMaxTemp;
+    double epsrPMaxTemp;
+    double epsrNMaxTemp;
 
     double RPTemp;
     double RNTemp;
@@ -186,8 +201,8 @@ protected:
     double epsrNTwoPrev;
     double sigrNTwoPrev;
 
-    double epsrPMaxMax;
-    double epsrNMaxMax;
+    double epsrPMax;
+    double epsrNMax;
 
     double RP;
     double RN;
@@ -195,23 +210,6 @@ protected:
     double RPTwoPrev;
     double RNTwoPrev;
 };
-}
-
-#define _IFT_SteelMPF_Name "steelMPF"
-#define _IFT_SteelMPF_fyP "fyp"
-#define _IFT_SteelMPF_fyN "fyn"
-#define _IFT_SteelMPF_E0 "e0"
-#define _IFT_SteelMPF_bP "bp"
-#define _IFT_SteelMPF_bN "bn"
-#define _IFT_SteelMPF_R0 "r0"
-#define _IFT_SteelMPF_a1 "a1"
-#define _IFT_SteelMPF_a2 "a2"
-#define _IFT_SteelMPF_a3P "a3p"
-#define _IFT_SteelMPF_a4P "a4p"
-#define _IFT_SteelMPF_a3N "a3n"
-#define _IFT_SteelMPF_a4N "a4n"
-
-namespace oofem {
 
 enum class SteelMPF_Properties : int {
     SMPF_FYP = 300,
@@ -227,9 +225,6 @@ enum class SteelMPF_Properties : int {
     SMPF_A3N = 310,
     SMPF_A4N = 311,
 };
-
-class GaussPoint;
-class Domain;
 
 /**
  * Oofem port of Kolozvari's implementation of the steel material model described in
@@ -266,7 +261,7 @@ protected:
     /**
      * helper function to calculate @f$ \varepsilon^{*} @f$
      */
-    static double computeEpsilonStar( const double &eps, const double &eps0P, const double &epsrP );
+    static double computeEpsilonStar( const double &eps, const double &eps0, const double &epsr );
     /**
      * helper function to calculate the stress according to the material law
      */
@@ -284,8 +279,8 @@ protected:
     double fyP = 0.0; // : positive yield stress
     double fyN = 0.0; // : negative yield stress
     double E0  = 0.0; // : initial stiffness
-    double bP  = 0.0; // : hardening ratio (Esh/E0)
-    double bN  = 0.0; // : hardening ratio (Esh/E0)
+    double bP  = 0.0; // : hardening ratio (Esh/E0) in tension
+    double bN  = 0.0; // : hardening ratio (Esh/E0) in compression
     double R0  = 0.0; // : elastic-plastic transition
     double a1  = 0.0; // : coefficient a1 for changing the transition curvature
     double a2  = 0.0; // : coefficient a2 for changing the transition curvature

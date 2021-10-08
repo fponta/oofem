@@ -1,7 +1,7 @@
 latticeplastdamvisco_mps_1.out
 Single element loaded in uniaxial tension. Nonuniform loading rate, damage initiation, partial relaxation, damage growth, end of loading, stress relaxation. MPS model used for viscoelasticity, basic creep only, no shrinkage.
 nonlinearstatic nsteps 25 rtolv 1.e-8 MaxIter 5000 controllmode 1 stiffMode 1 renumber 1 updateelasticstiffnessflag manrmsteps 5 deltatfunction 4 nmodules 1
- errorcheck
+errorcheck
 #
 domain 2dlattice
 OutputManager tstep_all dofman_all element_all
@@ -31,14 +31,14 @@ Set 2 nodes 1 1
 Set 3 nodes 1 2 
 #
 #TIME
-#ELEMENT number 1 gp 1 keyword latticestress component 1
-#ELEMENT number 1 gp 1 keyword latticesrain component 1 
+#ELEMENT number 1 gp 1 keyword "latticestrain" component 1
+#ELEMENT number 1 gp 1 keyword "latticestress" component 1
 #
 #%BEGIN_CHECK%
-#ELEMENT tStep 10 number 1 gp 1 keyword 139 component 1 value 2.80974899e+00 tolerance 1.e-6
-#ELEMENT tStep 13 number 1 gp 1 keyword 139 component 1 value 2.55402025e+00 tolerance 1.e-6
-#ELEMENT tStep 16 number 1 gp 1 keyword 139 component 1 value 2.55411289e+00 tolerance 1.e-6
-#ELEMENT tStep 19 number 1 gp 1 keyword 139 component 1 value 2.20349633e+00 tolerance 1.e-6
-#ELEMENT tStep 22 number 1 gp 1 keyword 139 component 1 value 1.68525369e+00 tolerance 1.e-6
-#ELEMENT tStep 25 number 1 gp 1 keyword 139 component 1 value 1.24625293e+00 tolerance 1.e-6
+#ELEMENT tStep 10 number 1 gp 1 keyword 139 component 1 value 2.80973642e+00 tolerance 1.e-6
+#ELEMENT tStep 13 number 1 gp 1 keyword 139 component 1 value 2.55894185e+00 tolerance 1.e-6
+#ELEMENT tStep 16 number 1 gp 1 keyword 139 component 1 value 2.55834671e+00 tolerance 1.e-6
+#ELEMENT tStep 19 number 1 gp 1 keyword 139 component 1 value 2.20367783e+00 tolerance 1.e-6
+#ELEMENT tStep 22 number 1 gp 1 keyword 139 component 1 value 1.73687255e+00 tolerance 1.e-6
+#ELEMENT tStep 25 number 1 gp 1 keyword 139 component 1 value 1.33234290e+00 tolerance 1.e-6
 #%END_CHECK%

@@ -82,6 +82,7 @@ protected:
 
     int compressionFlag = 0;
 
+
 public:
 
     /// Constructor
@@ -93,7 +94,7 @@ public:
 
     double giveKappaDOne() const { return kappaDOne; }
     double giveKappaDTwo() const { return kappaDTwo; }
-    //   double giveKappaDThree() { return kappaDThree; }
+
     double giveTempKappaDOne() const { return tempKappaDOne; }
     double giveTempKappaDTwo() const { return tempKappaDTwo; }
 
@@ -102,8 +103,6 @@ public:
     void   setTempKappaDOne(double newKappa) { tempKappaDOne = newKappa; }
 
     void   setTempKappaDTwo(double newKappa) { tempKappaDTwo = newKappa; }
-
-    //void   setTempKappaDThree(double newKappa) { tempKappaDThree = newKappa; }
 
     double giveDamage() const { return damage; }
 
@@ -128,6 +127,7 @@ public:
     void restoreContext(DataStream &stream, ContextMode mode) override;
 };
 
+
 /**
  * This class implements a local random plasticity damage model for concrete for lattice elements.
  */
@@ -135,8 +135,11 @@ class LatticePlasticityDamage : public LatticeLinearElastic
 {
 protected:
 
-    enum LatticePlasticityDamage_ReturnResult { RR_NotConverged, RR_Converged };
-    mutable LatticePlasticityDamage_ReturnResult returnResult = RR_NotConverged; /// FIXME: This must be removed. Not thread safe. Shouldn't be stored at all.
+    enum LatticePlasticityDamage_ReturnResult {
+        RR_Unknown,
+        RR_NotConverged,
+        RR_Converged
+    };
 
     double initialYieldStress = 0.;
 
@@ -160,8 +163,8 @@ protected:
     /// softening type determines the type of softening. 0 is exponential and 1 is bilinear.
     int softeningType = 0;
 
-    /// tensile stress value for bilinear stress-crack opening curve
-    double ftOne = 0.;
+    /// ratio of tensile stress value for bilinear stress-crack opening curve
+    double ftOneRatio = 0.;
 
     /// crack opening value for bilinear stress-crack opening curve
     double wfOne = 0.;
@@ -171,12 +174,17 @@ protected:
 
     /// yield tolerance
     double yieldTol = 0.;
+
     /// maximum number of iterations for stress return
     int newtonIter = 0;
     int numberOfSubIncrements = 0;
 
-    //damageFlag
+    ///damageFlag
     int damageFlag = 0;
+
+    virtual double giveTensileStrength(GaussPoint *gp, TimeStep *tStep) const { return this->give(ft_strength, gp) * this->ft; }
+
+    virtual double giveCompressiveStrength(GaussPoint *gp, TimeStep *tStep) const { return this->give(fc_strength, gp) * this->fc; }
 
 public:
 
@@ -191,31 +199,27 @@ public:
 
     bool isCharacteristicMtrxSymmetric(MatResponseMode rMode) const override { return false; }
 
+    double give(int aProperty, GaussPoint *gp) const override;
 
     FloatMatrixF< 6, 6 >give3dLatticeStiffnessMatrix(MatResponseMode rMode, GaussPoint *gp, TimeStep *tStep) const override;
 
     bool hasMaterialModeCapability(MaterialMode mode) const override;
 
-    // Doesn't exist? old code:
-    //FloatMatrix<X,X> computeBMatrix(const FloatArrayF<3> &sigma, const double deltaLambda) const;
-
-    FloatMatrixF< 3, 3 >computeAMatrix(const FloatArrayF< 3 > &sigma, const double tempKappa,
-                                       const double deltaLambda, GaussPoint *gp) const;
 
     FloatArrayF< 3 >computeFVector(const FloatArrayF< 3 > &sigma, const double deltaLambda,
-                                   GaussPoint *gp) const;
+                                   GaussPoint *gp, TimeStep *tStep) const;
 
     FloatArrayF< 3 >computeMVector(const FloatArrayF< 3 > &sigma, const double deltaLambda,
-                                   GaussPoint *gp) const;
+                                   GaussPoint *gp, TimeStep *tStep) const;
 
     FloatMatrixF< 3, 3 >computeDMMatrix(const FloatArrayF< 3 > &sigma, const double deltaLambda,
-                                        GaussPoint *gp) const;
+                                        GaussPoint *gp, TimeStep *tStep) const;
 
 
     FloatMatrixF< 4, 4 >computeJacobian(const FloatArrayF< 3 > &sigma, const double tempKappa,
-                                        const double deltaLambda, GaussPoint *gp) const;
+                                        const double deltaLambda, GaussPoint *gp, TimeStep *tStep) const;
 
-    virtual double computeDamageParam(double kappaOne, double kappaTwo, GaussPoint *gp) const;
+    virtual double computeDamageParam(double kappaOne, double kappaTwo, GaussPoint *gp, TimeStep *tStep) const;
 
     FloatArrayF< 6 >giveLatticeStress3d(const FloatArrayF< 6 > &jump, GaussPoint *gp, TimeStep *tStep) override;
 
@@ -224,13 +228,15 @@ public:
                                             TimeStep *tStep) const;
 
     void performDamageEvaluation(GaussPoint *gp,
-                                 FloatArrayF< 6 > &reducedStrain) const;
+                                 FloatArrayF< 6 > &reducedStrain,
+                                 TimeStep *tStep) const;
 
-    double performRegularReturn(FloatArrayF< 3 > &stress, double yieldValue, GaussPoint *gp) const;
+    double performRegularReturn(FloatArrayF< 3 > &stress, LatticePlasticityDamage_ReturnResult &returnResult, double yieldValue, GaussPoint *gp, TimeStep *tStep) const;
 
     double computeYieldValue(const FloatArrayF< 3 > &sigma,
                              const double tempKappa,
-                             GaussPoint *gp) const;
+                             GaussPoint *gp,
+                             TimeStep *tStep) const;
 
     double computeHardening(const double kappa,
                             GaussPoint *gp) const;

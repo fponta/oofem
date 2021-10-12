@@ -6026,7 +6026,60 @@ Supported modes& 1dMat\\
 %\end{center}
 \end{table}
 
+\clearpage
 
+\subsection{Material models for steel rebars}
+
+\subsubsection{Menegotto Pinto hysteretic material with isotropic hardening with Filippou adjustment - SteelMPF}
+
+This uniaxial material is the Kolozvari et al. \cite{Kolozvari} implementation of the
+Menegotto-Pinto hysteretic material for steel reinforcement \cite{MenegottoPinto} which
+includes Filippou et al. \cite{Filippou} adjustments for isotropic strain hardening and
+the compensation of stress overshooting effects after partial reloading.
+
+The model description and parameters are summarized in Tab.~\ref{steelmpf_table}.
+
+\begin{table}[!htb]
+	%\begin{center}
+	\begin{mmt}
+		\hline
+		Description & Menegotto-Pinto-Filippou hysteretic material for steel reinforcement\\
+		\hline
+		Record Format & \descitem{SteelMPF}
+		\elemparam{num}{in}
+		\elemparam{fyp}{rn}
+		\optelemparam{fyn}{rn}
+		\elemparam{e0} {rn}
+		\elemparam{bp} {rn}
+		\optelemparam{bn} {rn}
+		\elemparam{r0} {rn}
+		\elemparam{a1} {rn}
+		\elemparam{a2} {rn}
+		\elemparam{a3p}{rn}
+		\elemparam{a4p}{rn}
+		\optelemparam{a3n}{rn}
+		\optelemparam{a4n}{rn}\\
+		Parameters &- \param{num} material model number\\
+		&- \param{fyp} yield stress in tension \\
+		&- \param{fyn} yield stress in compression. Optional parameter. Default = fyp \\
+		&- \param{e0}  initial stiffness  \\
+		&- \param{bp}  hardening ratio (Esh/E0) in tension \\
+		&- \param{bn}  hardening ratio (Esh/E0) in compression. Optional parameter. Default = bp \\
+		&- \param{r0}  elastic-plastic transition \\
+		&- \param{a1}  coefficient a1 for changing the transition curvature \\
+		&- \param{a2}  coefficient a2 for changing the transition curvature \\
+		&- \param{a3p} coefficient a3 for hardening in tension \\
+		&- \param{a4p} coefficient a4 for hardening in tension \\
+		&- \param{a3n} coefficient a3 for hardening in compression. Optional parameter. Default = a3p \\
+		&- \param{a4n} coefficient a4 for hardening in compression. Optional parameter. Default = a4p \\
+		
+		Supported modes& 1dMat\\
+		\hline
+	\end{mmt}
+	\caption{Menegotto-Pinto-Filippou steel material model -- summary.}
+	\label{steelmpf_table}
+	%\end{center}
+\end{table}
 
 \subsection{User-defined material models using MFront}
 A user-defined material created with MFront can be used if MGIS is installed
@@ -7095,6 +7148,10 @@ In Rock Under Compression, International Journal of Fracture Mechanics
 \bibitem{fib:2010} International Federation for Structural Concrete (\textit{fib}): The \textit{fib} Model Code for Concrete Structures 2010.
 \bibitem{GraDav11} P. Grassl and T. Davies: Lattice modelling of corrosion induced cracking and bond in reinforced concrete. Cement and Concrete Composites, 33, 918-924, 2011.
 \bibitem{AthWheGra18} I. Athanasiadis, S. Wheeler and P. Grassl: Hydro-mechanical network modelling of particulate composites. International Journal of Solids and Structures 130-131, 49-60, 2018.
+\bibitem{Kolozvari} K. Kolozvari, K. Orakcal and J.W. Wallace:  Shear-flexure  interaction  modeling  for  reinforced  concrete  structural  
+walls  and  columns  under  cyclic  loading. {\em Technical  Report  PEER}, 12, 2015.
+\bibitem{MenegottoPinto} M. Menegotto and P.E. Pinto: Method of analysis of cyclically loaded RC plane frames including changes in geometry and non-elastic behavior of elements under normal force and bending. {\em IABSE Preliminary Report}, 13, 1973.
+\bibitem{Filippou} F.C. Filippou, E.P. Popov and V.V. Bertero: Effects of Bond Deterioration on Hysteretic Behavior of Reinforced Concrete Joints. {\em Report UCB/EERC}, 19, 1983.
 \end{thebibliography}
 
 \end{document}

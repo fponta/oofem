@@ -170,7 +170,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
             sig0PTwoPrev = sig0P;
 
             double epsStarP = computeEpsilonStar( eps, eps0P, epsrP );
-            sig             = computeSigma( bP, epsStarP, RP, sig0P, sigrP );
+            sig             = computeSigmaStar( bP, epsStarP, RP, sig0P, sigrP );
             Et              = ( ( sig0P - sigrP ) / ( eps0P - epsrP ) ) * computeEStar( bP, epsStarP, RP );
         } else {
             inc = SteelMPF_LoadStatus::SMP_LS_NegativeLoading;
@@ -181,7 +181,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
             sig0NTwoPrev = sig0N;
 
             double epsStarN = computeEpsilonStar( eps, eps0N, epsrN );
-            sig             = computeSigma( bN, epsStarN, RN, sig0N, sigrN );
+            sig             = computeSigmaStar( bN, epsStarN, RN, sig0N, sigrN );
             Et              = ( ( sig0N - sigrN ) / ( eps0N - epsrN ) ) * computeEStar( bN, epsStarN, RN );
         }
     }
@@ -226,16 +226,16 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 RN         = min( RN, R0 - a1R0 * ksi / ( a2 + ksi ) );
 
                 double epsStarN = computeEpsilonStar( eps, eps0N, epsrN );
-                sig             = computeSigma( bN, epsStarN, RN, sig0N, sigrN );
+                sig             = computeSigmaStar( bN, epsStarN, RN, sig0N, sigrN );
                 Et              = ( ( sig0N - sigrN ) / ( eps0N - epsrN ) ) * computeEStar( bN, epsStarN, RN );
 
                 double epsStarNLimit = computeEpsilonStar( eps, eps0NTwoPrev, epsrNTwoPrev );
-                double sigLimit      = computeSigma( bN, epsStarNLimit, RNTwoPrev, sig0NTwoPrev, sigrNTwoPrev );
+                double sigLimit      = computeSigmaStar( bN, epsStarNLimit, RNTwoPrev, sig0NTwoPrev, sigrNTwoPrev );
                 double EtLimit       = ( ( sig0NTwoPrev - sigrNTwoPrev ) / ( eps0NTwoPrev - epsrNTwoPrev ) ) * computeEStar( bN, epsStarNLimit, RNTwoPrev );
 
                 double RControl   = RNTwoPrev;
                 double estControl = computeEpsilonStar( epsrN, eps0NTwoPrev, epsrNTwoPrev );
-                double sigControl = computeSigma( bN, estControl, RControl, sig0NTwoPrev, sigrNTwoPrev );
+                double sigControl = computeSigmaStar( bN, estControl, RControl, sig0NTwoPrev, sigrNTwoPrev );
 
                 outN = sigrN < sigControl ? 1 : 0;
 
@@ -246,11 +246,11 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 }
             } else {
                 double epsStarP = computeEpsilonStar( eps, eps0P, epsrP );
-                sig             = computeSigma( bP, epsStarP, RP, sig0P, sigrP );
+                sig             = computeSigmaStar( bP, epsStarP, RP, sig0P, sigrP );
                 Et              = ( ( sig0P - sigrP ) / ( eps0P - epsrP ) ) * computeEStar( bP, epsStarP, RP );
 
                 double epsStarPLimit = computeEpsilonStar( eps, eps0PTwoPrev, epsrPTwoPrev );
-                double sigLimit      = computeSigma( bP, epsStarPLimit, RPTwoPrev, sig0PTwoPrev, sigrPTwoPrev );
+                double sigLimit      = computeSigmaStar( bP, epsStarPLimit, RPTwoPrev, sig0PTwoPrev, sigrPTwoPrev );
                 double EtLimit       = ( ( sig0PTwoPrev - sigrPTwoPrev ) / ( eps0PTwoPrev - epsrPTwoPrev ) ) * computeEStar( bP, epsStarPLimit, RPTwoPrev );
 
                 if ( epsrP > epsrPTwoPrev && outP == 0 && sig > sigLimit ) {
@@ -299,16 +299,16 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 RP         = min( RP, R0 - a1R0 * ksi / ( a2 + ksi ) );
 
                 double epsStarP = computeEpsilonStar( eps, eps0P, epsrP );
-                sig             = computeSigma( bP, epsStarP, RP, sig0P, sigrP );
+                sig             = computeSigmaStar( bP, epsStarP, RP, sig0P, sigrP );
                 Et              = ( ( sig0P - sigrP ) / ( eps0P - epsrP ) ) * computeEStar( bP, epsStarP, RP );
 
                 double epsStarPLimit = computeEpsilonStar( eps, eps0PTwoPrev, epsrPTwoPrev );
-                double sigLimit      = computeSigma( bP, epsStarPLimit, RPTwoPrev, sig0PTwoPrev, sigrPTwoPrev );
+                double sigLimit      = computeSigmaStar( bP, epsStarPLimit, RPTwoPrev, sig0PTwoPrev, sigrPTwoPrev );
                 double EtLimit       = ( ( sig0PTwoPrev - sigrPTwoPrev ) / ( eps0PTwoPrev - epsrPTwoPrev ) ) * computeEStar( bP, epsStarPLimit, RPTwoPrev );
 
                 double RControl       = RPTwoPrev;
                 double epsStarControl = computeEpsilonStar( epsrP, eps0PTwoPrev, epsrPTwoPrev );
-                double sigControl     = computeSigma( bP, epsStarControl, RControl, sig0PTwoPrev, sigrPTwoPrev );
+                double sigControl     = computeSigmaStar( bP, epsStarControl, RControl, sig0PTwoPrev, sigrPTwoPrev );
 
                 outP = sigrP > sigControl ? 1 : 0;
 
@@ -319,11 +319,11 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 }
             } else {
                 double epsStarN = computeEpsilonStar( eps, eps0N, epsrN );
-                sig             = computeSigma( bN, epsStarN, RN, sig0N, sigrN );
+                sig             = computeSigmaStar( bN, epsStarN, RN, sig0N, sigrN );
                 Et              = ( ( sig0N - sigrN ) / ( eps0N - epsrN ) ) * computeEStar( bN, epsStarN, RN );
 
                 double epsStarNLimit = computeEpsilonStar( eps, eps0NTwoPrev, epsrNTwoPrev );
-                double sigLimit      = computeSigma( bN, epsStarNLimit, RNTwoPrev, sig0NTwoPrev, sigrNTwoPrev );
+                double sigLimit      = computeSigmaStar( bN, epsStarNLimit, RNTwoPrev, sig0NTwoPrev, sigrNTwoPrev );
                 double EtLimit       = ( ( sig0NTwoPrev - sigrNTwoPrev ) / ( eps0NTwoPrev - epsrNTwoPrev ) ) * computeEStar( bN, epsStarNLimit, RNTwoPrev );
 
                 if ( epsrN < epsrNTwoPrev && outN == 0 && sig < sigLimit ) {
@@ -374,7 +374,7 @@ SteelMPF::computeEpsilonStar( const double &eps, const double &eps0, const doubl
 
 
 double
-SteelMPF::computeSigma( const double &b, const double &epsStar, const double &R, const double &sig0, const double &sigr )
+SteelMPF::computeSigmaStar( const double &b, const double &epsStar, const double &R, const double &sig0, const double &sigr )
 {
     const double sigStar = b * epsStar + ( ( 1.0 - b ) / pow( ( 1.0 + pow( epsStar, R ) ), ( 1.0 / R ) ) ) * epsStar;
     return sigr + sigStar * ( sig0 - sigr );

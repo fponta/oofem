@@ -259,15 +259,15 @@ public:
 protected:
     // Helper functions to calculate stresses and strains according to the formulation
     /**
-     * helper function to calculate @f$ \varepsilon^{*} @f$
+     * helper function to calculate @f$ \varepsilon^{*} @f$, the normalized strain
      */
     static double computeEpsilonStar( const double &eps, const double &eps0, const double &epsr );
     /**
-     * helper function to calculate the stress according to the material law
+     * helper function to calculate the normalized stress @f$ \sigma^{*} @f$, according to the material law
      */
-    static double computeSigma( const double &b, const double &epsStar, const double &R, const double &sig0, const double &sigr );
+    static double computeSigmaStar( const double &b, const double &epsStar, const double &R, const double &sig0, const double &sigr );
     /**
-     * helper function to calculate @f$ E^{*} @f$
+     * helper function to calculate @f$ E^{*} @f$, i.e. the normalized tangent
      */
     static double computeEStar( const double &b, const double &eps, const double &R );
     /**

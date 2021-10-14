@@ -62,6 +62,10 @@ void SteelMPF::initializeFrom( InputRecord &ir )
     a4N = a4P;
     IR_GIVE_OPTIONAL_FIELD( ir, a4N, _IFT_SteelMPF_a4N );
 
+    if (fyP < 0.0 || fyN < 0.0 || E0 < 0.0 || bP < 0.0 || bN < 0.0 || R0 < 0.0 || a1 < 0.0 || a2 < 0.0 || a3P < 0.0 || a4P < 0.0 || a3N < 0.0 || a3P < 0.0) {
+        OOFEM_WARNING("All parameters must be positive.");
+    }
+
     // curvature parameter
     a1R0 = a1 * R0;
     // yield strains

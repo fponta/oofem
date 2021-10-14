@@ -138,9 +138,9 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
 
     double &epsrPMax = ms->giveEpsrPMaxTemp();
     double &epsrNMax = ms->giveEpsrNMaxTemp();
-    double &RP          = ms->giveRPTemp();
-    double &RN          = ms->giveRNTemp();
-    int &nLoop          = ms->giveNLoopTemp();
+    double &RP       = ms->giveRPTemp();
+    double &RN       = ms->giveRNTemp();
+    int &nLoop       = ms->giveNLoopTemp();
 
     double &RPTwoPrev = ms->giveRPTwoPrevTemp();
     double &RNTwoPrev = ms->giveRNTwoPrevTemp();
@@ -543,8 +543,8 @@ void SteelMPFMaterialStatus ::initTempStatus()
     sigrPTemp        = 0.0;
     epsrNTemp        = 0.0;
     sigrNTemp        = 0.0;
-    epsrPMaxTemp  = 0.0;
-    epsrNMaxTemp  = 0.0;
+    epsrPMaxTemp     = 0.0;
+    epsrNMaxTemp     = 0.0;
     epsrNTwoPrevTemp = 0.0;
     sigrNTwoPrevTemp = 0.0;
     epsrPTwoPrevTemp = 0.0;
@@ -575,8 +575,8 @@ void SteelMPFMaterialStatus::copyCommittedToTemp() noexcept
     sigrPTemp        = sigrP;
     epsrNTemp        = epsrN;
     sigrNTemp        = sigrN;
-    epsrPMaxTemp  = epsrPMax;
-    epsrNMaxTemp  = epsrNMax;
+    epsrPMaxTemp     = epsrPMax;
+    epsrNMaxTemp     = epsrNMax;
     eps0PTemp        = eps0P;
     sig0PTemp        = sig0P;
     eps0NTemp        = eps0N;
@@ -609,8 +609,8 @@ void SteelMPFMaterialStatus ::updateYourself( TimeStep *tStep ) noexcept
     sigrP        = sigrPTemp;
     epsrN        = epsrNTemp;
     sigrN        = sigrNTemp;
-    epsrPMax  = epsrPMaxTemp;
-    epsrNMax  = epsrNMaxTemp;
+    epsrPMax     = epsrPMaxTemp;
+    epsrNMax     = epsrNMaxTemp;
     eps0P        = eps0PTemp;
     sig0P        = sig0PTemp;
     eps0N        = eps0NTemp;

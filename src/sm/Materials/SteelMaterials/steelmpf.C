@@ -37,6 +37,7 @@
 #include "inputrecord.h"
 #include "contextioerr.h"
 #include "gausspoint.h"
+#include <math.h>
 
 namespace oofem {
 REGISTER_Material( SteelMPF );
@@ -62,8 +63,8 @@ void SteelMPF::initializeFrom( InputRecord &ir )
     a4N = a4P;
     IR_GIVE_OPTIONAL_FIELD( ir, a4N, _IFT_SteelMPF_a4N );
 
-    if (fyP < 0.0 || fyN < 0.0 || E0 < 0.0 || bP < 0.0 || bN < 0.0 || R0 < 0.0 || a1 < 0.0 || a2 < 0.0 || a3P < 0.0 || a4P < 0.0 || a3N < 0.0 || a4N < 0.0) {
-        OOFEM_WARNING("All parameters must be positive.");
+    if ( fyP < 0.0 || fyN < 0.0 || E0 < 0.0 || bP < 0.0 || bN < 0.0 || R0 < 0.0 || a1 < 0.0 || a2 < 0.0 || a3P < 0.0 || a4P < 0.0 || a3N < 0.0 || a4N < 0.0 ) {
+        OOFEM_WARNING( "All parameters must be positive." );
     }
 
     // curvature parameter
@@ -207,7 +208,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 epsrNMax = max( epsrN, epsrNMax );
 
                 double sigShift;
-                if ( abs( epsrNMax ) < epsYieldP ) {
+                if ( fabs( epsrNMax ) < epsYieldP ) {
                     sigShift = 0.0;
                 } else {
                     sigShift = max( 0.0, computeShift( fyN, epsrNMax, epsYieldP, a3P, a4P ) );
@@ -226,7 +227,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                     em = epsrP;
                 }
 
-                double ksi = abs( ( em - eps0N ) / epsYieldN );
+                double ksi = fabs( ( em - eps0N ) / epsYieldN );
                 RN         = min( RN, R0 - a1R0 * ksi / ( a2 + ksi ) );
 
                 double epsStarN = computeEpsilonStar( eps, eps0N, epsrN );
@@ -280,7 +281,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                 epsrPMax = min( epsrP, epsrPMax );
 
                 double sigShift;
-                if ( abs( epsrPMax ) < epsYieldN ) {
+                if ( fabs( epsrPMax ) < epsYieldN ) {
                     sigShift = 0.0;
                 } else {
                     sigShift = max( 0.0, computeShift( fyP, epsrPMax, epsYieldN, a3N, a4N ) );
@@ -299,7 +300,7 @@ SteelMPF::giveRealStressVector_1d( const FloatArrayF<1> &reducedE, GaussPoint *g
                     em = epsrN;
                 }
 
-                double ksi = abs( ( em - eps0P ) / epsYieldP );
+                double ksi = fabs( ( em - eps0P ) / epsYieldP );
                 RP         = min( RP, R0 - a1R0 * ksi / ( a2 + ksi ) );
 
                 double epsStarP = computeEpsilonStar( eps, eps0P, epsrP );
@@ -366,7 +367,7 @@ int SteelMPF::giveIPValue( FloatArray &answer, GaussPoint *gp, InternalStateType
 
 double SteelMPF::computeShift( const double &sigy, const double &epsmax, const double &epsy, const double &a3, const double &a4 )
 {
-    return sigy * a3 * ( abs( epsmax ) / epsy - a4 );
+    return sigy * a3 * ( fabs( epsmax ) / epsy - a4 );
 }
 
 

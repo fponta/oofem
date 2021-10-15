@@ -1,6 +1,6 @@
 steelmpf.out
 Test of steelmpf hysteretic material
-NonLinearStatic nsteps 9 deltat 1.0 rtolv 1e-4 controlmode 1 initialGuess 1 maxiter 300 manrmsteps 1 nmodules 1 
+NonLinearStatic nsteps 9 deltat 1.0 rtolv 1e-4 controlmode 1 maxiter 300 manrmsteps 1 nmodules 1 
 errorcheck
 domain 3dTruss
 OutputManager tstep_all dofman_all element_all

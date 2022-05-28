@@ -69,9 +69,9 @@ enum class SteelMPF_LoadStatus {
 };
 
 /**
-* This class implements a structural material status information for SteelMP material.
-* Filippou, F. C., Popov, E. P., Bertero, V. V. (1983). "Effects of Bond Deterioration on Hysteretic Behavior of Reinforced Concrete Joints". Report EERC 83-19, Earthquake Engineering Research Center, University of California, Berkeley. 
-*/
+ * This class implements a structural material status information for SteelMP material.
+ * Filippou, F. C., Popov, E. P., Bertero, V. V. (1983). "Effects of Bond Deterioration on Hysteretic Behavior of Reinforced Concrete Joints". Report EERC 83-19, Earthquake Engineering Research Center, University of California, Berkeley.
+ */
 class SteelMPFMaterialStatus : public StructuralMaterialStatus
 {
 public:
@@ -228,7 +228,7 @@ enum class SteelMPF_Properties : int {
 
 /**
  * Oofem port of Kolozvari's implementation of the steel material model described in
- * Filippou, F. C., Popov, E. P., Bertero, V. V. (1983). "Effects of Bond Deterioration on Hysteretic Behavior of Reinforced Concrete Joints". Report EERC 83-19, Earthquake Engineering Research Center, University of California, Berkeley. 
+ * Filippou, F. C., Popov, E. P., Bertero, V. V. (1983). "Effects of Bond Deterioration on Hysteretic Behavior of Reinforced Concrete Joints". Report EERC 83-19, Earthquake Engineering Research Center, University of California, Berkeley.
  * uses a 2 step memory to mitigate stress overshooting.
  * @author Francesco Pontarin
  */
@@ -296,4 +296,4 @@ protected:
 
 } // namespace oofem
 
-#endif //steelmpf_h
+#endif // steelmpf_h

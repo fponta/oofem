@@ -365,20 +365,20 @@ int SteelMPF::giveIPValue( FloatArray &answer, GaussPoint *gp, InternalStateType
     return StructuralMaterial::giveIPValue( answer, gp, type, tStep );
 }
 
-double SteelMPF::computeShift( const double &sigy, const double &epsmax, const double &epsy, const double &a3, const double &a4 )
+inline double SteelMPF::computeShift( const double &sigy, const double &epsmax, const double &epsy, const double &a3, const double &a4 )
 {
     return sigy * a3 * ( fabs( epsmax ) / epsy - a4 );
 }
 
 
-double
+inline double
 SteelMPF::computeEpsilonStar( const double &eps, const double &eps0, const double &epsr )
 {
     return ( eps - epsr ) / ( eps0 - epsr );
 }
 
 
-double
+inline double
 SteelMPF::computeSigmaStar( const double &b, const double &epsStar, const double &R, const double &sig0, const double &sigr )
 {
     const double sigStar = b * epsStar + ( ( 1.0 - b ) / pow( ( 1.0 + pow( epsStar, R ) ), ( 1.0 / R ) ) ) * epsStar;
@@ -386,16 +386,10 @@ SteelMPF::computeSigmaStar( const double &b, const double &epsStar, const double
 }
 
 
-double
+inline double
 SteelMPF::computeEStar( const double &b, const double &eps, const double &R )
 {
     return ( b + ( ( 1.0 - b ) / pow( ( 1 + pow( eps, R ) ), ( 1.0 / R ) ) ) * ( 1.0 - pow( eps, R ) / ( 1 + pow( eps, R ) ) ) );
-}
-
-
-bool SteelMPF::hasMaterialModeCapability( MaterialMode mode ) const
-{
-    return mode == _1dMat;
 }
 
 

@@ -249,7 +249,10 @@ public:
 
     double give( int, GaussPoint *gp ) const override;
 
-    bool hasMaterialModeCapability( MaterialMode mode ) const override;
+    bool hasMaterialModeCapability( MaterialMode mode ) const override
+    {
+        return mode == _1dMat;
+    }
 
     bool isCharacteristicMtrxSymmetric( MatResponseMode rMode ) const override { return true; }
     const char *giveClassName() const override { return "SteelMPF"; }

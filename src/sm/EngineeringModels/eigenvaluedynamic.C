@@ -33,6 +33,7 @@
  */
 
 #include "sm/EngineeringModels/eigenvaluedynamic.h"
+#include "oofem_version.h"
 #include "timestep.h"
 #include "floatmatrix.h"
 #include "floatarray.h"

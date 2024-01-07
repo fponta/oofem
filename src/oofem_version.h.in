@@ -3,4 +3,29 @@
 #define OOFEM_GIT_HASH "@OOFEM_GIT_HASH@"
 #define OOFEM_GIT_REPOURL "@OOFEM_GIT_REPOURL@"
 #define OOFEM_GIT_BRANCH "@OOFEM_GIT_BRANCH@"
-#endif  /* OOFEM_VERSION_H_ */
+
+#define PRG_VERSION "OOFEM version @oofem_VERSION_MAJOR@.@oofem_VERSION_MINOR@"
+#define OOFEG_VERSION "OOFEG version @oofem_VERSION_MAJOR@.@oofem_VERSION_MINOR@"
+#define OOFEM_COPYRIGHT "@oofem_COPYRIGHT@"
+
+#define PRG_HEADER_SM "\
+____________________________________________________\n\
+  ____  ____  __________  ___ \n\
+ / __ \\/ __ \\/ __/ __/  |/  /___  _______ _\n\
+/ /_/ / /_/ / _// _// /|_/ // _ \\/ __/ _ `/\n\
+\\____/\\____/_/ /___/_/  /_(_)___/_/  \\_, / \n\
+                                    /___/  \n\
+        @oofem_COPYRIGHT@\n\
+____________________________________________________\n"
+
+#define PRG_HEADER "\
+############################################################## www.oofem.org ###\n\
+  ____  ____  __________  ___\n\
+ / __ \\/ __ \\/ __/ __/  |/  /___  _______ _\n\
+/ /_/ / /_/ / _// _// /|_/ // _ \\/ __/ _ `/\n\
+\\____/\\____/_/ /___/_/  /_(_)___/_/  \\_, /  OOFEM ver. @oofem_VERSION_MAJOR@.@oofem_VERSION_MINOR@ \n\
+                                    /___/   @oofem_COPYRIGHT@\n\
+################################################################################\n\
+Git URL:" OOFEM_GIT_REPOURL ",\n    branch:" OOFEM_GIT_BRANCH ", hash:" OOFEM_GIT_HASH "\n\n"
+
+#endif /* OOFEM_VERSION_H_ */

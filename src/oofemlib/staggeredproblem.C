@@ -33,6 +33,7 @@
  */
 
 #include "staggeredproblem.h"
+#include "oofem_version.h"
 #include "engngm.h"
 #include "timestep.h"
 #include "function.h"

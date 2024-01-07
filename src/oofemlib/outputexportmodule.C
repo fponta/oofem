@@ -36,6 +36,7 @@
 #include <cstdio>
 
 #include "outputexportmodule.h"
+#include "oofem_version.h"
 #include "engngm.h"
 #include "domain.h"
 #include "node.h"

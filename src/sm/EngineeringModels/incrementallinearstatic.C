@@ -33,6 +33,7 @@
  */
 
 #include "sm/EngineeringModels/incrementallinearstatic.h"
+#include "oofem_version.h"
 #include "timestep.h"
 #include "dof.h"
 #include "domain.h"

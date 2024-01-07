@@ -39,6 +39,7 @@
  #include <Python.h>
 #endif
 
+#include "oofem_version.h"
 #include "engngm.h"
 #include "oofemcfg.h"
 
